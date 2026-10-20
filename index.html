@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meine Tagesnotiz</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+
+            /* Hintergrund und Flächen */
+            --page-bg: #30201D;
+            --bg: #FFF7F0;
+            --surface: #F5DDD1;
+
+            /* Schrift und Rahmen */
+            --fg: #4A302A;
+            --muted: #84645C;
+            --border: #C89B8B;
+
+            /* Akzentfarbe */
+            --blue: #E990A3;
+            
+            /* Helle Papierflächen der Lunchbox */
+            --paper: #FFF3E9;
+            --paper-soft: #F7DFD3;
+            --paper-ink: #4A302A;
+            --paper-muted: #84645C;
+
+        }
+    * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--fg);
+            font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+        }
+
+        .momo-dashboard {
+            position: relative;
+            isolation: isolate;
+
+            width: calc(100% - 32px);
+            max-width: 1180px;
+            margin: 100px auto 32px;
+            padding: 24px;
+
+            background: var(--surface);
+
+            /* äußerste dunkle Linie */
+            border: 3px solid rgba(48, 29, 25, 0.95);
+            border-radius: 32px;
+
+            /* weicher Gesamtschatten */
+            box-shadow:
+                0 14px 34px rgba(0, 0, 0, 0.20);
+        }
+        .momo-dashboard::before {
+            content: "";
+            position: absolute;
+            inset: 6px;
+
+            border-radius: 26px;
+
+            /* dickere helle Linie innen */
+            border: 6px solid #d8a08a;
+
+            /* leichter Lichtsaum / Glow */
+            box-shadow:
+                0 0 0 1px rgba(255, 236, 220, 0.35),
+                0 0 14px rgba(231, 176, 152, 0.24);
+
+            pointer-events: none;
+        }
+        .momo-dashboard > * {
+            position: relative;
+            z-index: 1;
+        }
+        .momo-header {
+            display: grid;
+            grid-template-columns: 56px minmax(0, 1fr) 190px;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .momo-logo {
+            width: 56px;
+            height: 56px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--bg);
+
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .momo-title h1 {
+            margin: 0 0 4px;
+        }
+        .momo-avatar {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+
+            width: 300px;
+            height: 300px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Größe der Momo-Grafik */
+        .momo-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .momo-date {
+            min-width: 0;
+        }
+        h1 {
+            font-size: 28px;
+            line-height: 1.2;
+            margin: 0 0 4px;
+            font-weight: 650
+        }
+        p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px
+        }
+        input,
+        textarea,
+        button {
+            font: inherit;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--fg);
+            background: var(--bg)
+        }
+
+        input {
+            padding: 8px;
+            min-height: 44px;
+            max-width: 100%
+        }
+
+        textarea {
+            display: block;
+            resize: vertical;
+            width: 100%;
+            min-height: 180px;
+            padding: 16px;
+            line-height: 1.6
+        }
+
+        textarea::placeholder {
+            color: var(--muted);
+            opacity: 1
+        }
+
+        button {
+            min-height: 44px;
+            padding: 8px 16px;
+            cursor: pointer;
+            background: var(--surface);
+            font-weight: 600
+        }
+
+        button:hover {
+            border-color: var(--blue)
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--blue);
+            outline-offset: 3px
+        }
+        .momo-main {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 260px;
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .momo-note-panel {
+            min-width: 0;
+        }
+        
+/* Werkzeugleiste unter dem Schreibfeld */
+        .momo-note-tools {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+
+            margin-top: 12px;
+            padding: 10px 12px;
+
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        /* Beschriftung der Werkzeugleiste */
+        .momo-note-tools span {
+            color: var(--fg);
+            font-size: 13px;
+        }
+
+        /* Export-Button in Pastellrosa */
+        .momo-note-tools #export {
+            background: #F6CDD5;
+            color: var(--paper-ink);
+            border-color: #D6A3A7;
+            }
+
+        .momo-status-panel {
+            padding: 16px;
+
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--bg);
+        }
+
+        .momo-status-panel h2 {
+            margin: 0 0 16px;
+            font-size: 18px;
+        }
+        .topic-card {
+            padding: 14px;
+            margin-bottom: 12px;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 4px;
+        }
+
+        .topic-name {
+            font-weight: 700;
+        }
+
+        .topic-xp {
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .topic-progress {
+            width: 100%;
+            height: 10px;
+
+            overflow: hidden;
+
+            background: var(--border);
+            border-radius: 999px;
+        }
+
+        .topic-progress-fill {
+            height: 100%;
+
+            background: var(--blue);
+            border-radius: inherit;
+        }
+
+        .topic-next-rank {
+            margin-top: 6px;
+
+            font-size: 12px;
+            color: var(--muted);
+        }
+        
+        /* Helle Innenflächen von Momo */
+        .momo-note-panel textarea,
+            .momo-status-panel {
+                background: var(--paper);
+                color: var(--paper-ink);
+            }
+
+        /* Lesbarer Platzhalter im Schreibfeld */
+        .momo-note-panel textarea::placeholder {
+                color: var(--paper-muted);
+            }
+
+        /* Kleine Themenkarte im Statusbereich */
+        .momo-status-panel .topic-card {
+                background: var(--paper-soft);
+            }
+
+        /* Dezente Zusatztexte der Themenkarte */
+        .momo-status-panel .topic-xp,
+        .momo-status-panel .topic-next-rank {
+            color: var(--paper-muted);
+        }
+        /* Unterer Bereich: Lernwerkzeuge*/
+        .momo-bottom {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        /* Grundgestaltung der drei Lernkarten */
+        .momo-bottom-card {
+            min-height: 180px;
+            padding: 16px;
+
+            border: 2px solid var(--border);
+            border-radius: 16px;
+
+            background: var(--paper);
+            color: var(--paper-ink);
+
+            display: flex;
+            flex-direction: column;
+        }
+        /* Überschriften innerhalb der Karten */
+        .momo-bottom-card h2 {
+            margin: 0 0 12px;
+            font-size: 18px;
+        }
+        
+        /* Beschreibungstexte der Lernkarten */
+        .momo-bottom-card p {
+            color: var(--paper-muted);
+        }
+
+        /* Quick Notes – Rosa */
+        .momo-bottom-card:nth-child(1) {
+            border-color: #E6A8B8;
+        }
+
+        /* Learning Questions – Apricot */
+        .momo-bottom-card:nth-child(2) {
+            border-color: #F0C58D;
+        }
+
+        /* Review – Lavendel */
+        .momo-bottom-card:nth-child(3) {
+            border-color: #CDB4E9;
+        }
+
+        /* Button in der Quick-Notes-Karte */
+        .momo-bottom-card button {
+            margin-top: auto;
+            align-self: flex-start;
+
+            background: #F6CDD5;
+            color: var(--paper-ink);
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 16px 0 12px
+        }
+        #status {
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        .hint {
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        @media(max-width:480px) {
+            .momo-dashboard {
+                width: calc(100% - 24px);
+                margin: 12px auto;
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            .momo-header {
+                grid-template-columns: 56px 1fr;
+            }
+
+            .momo-avatar {
+                grid-column: 1;
+            }
+
+            .momo-date {
+                grid-column: 2;
+            }
+            h1 {
+                font-size: 26px
+            }
+
+            .footer {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px
+            }
+
+            textarea {
+                min-height: 180px
+            }
+            .momo-main {
+                grid-template-columns: 1fr;
+            }
+            /* Lernkarten auf kleinen Bildschirmen untereinander */
+            .momo-bottom {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(prefers-color-scheme:dark) {
+            
+            :root {
+                --page-bg: #1E1413;
+                --bg: #3C2927;
+                --surface: #543630;
+                --fg: #FFF1E6;
+                --muted: #E1BFB2;
+                --border: #A0776D;
+                --blue: #FF9CAB;
+            }
+
+        }
+    </style>
+</head>
+
+    <body>
+        <main class="momo-dashboard">
+        <header class="momo-header">
+
+        <div class="momo-logo">
+        M
+        </div>
+
+        <div class="momo-title">
+            <h1>Momo Lunchbox</h1>
+            <p>Was haben wir heute gemacht?</p>
+            </div>
+            <div class="momo-date">
+            <label for="day">Datum</label>
+            <input id="day" type="date" value="2026-10-07">
+            </div>
+
+            </header>
+            <!-- Momo bewegt sich unabhängig vom Header-->
+            <div class="momo-avatar">
+            <img src="momo.png" alt="Momo, unser Lernmaskottchen">
+            </div>
+            
+            <section class="momo-main">
+
+            <div class="momo-note-panel">
+                    <label for="note" id="note-label">Meine Tagesnotiz</label>
+
+                    <textarea id="note"
+                    placeholder="Was habe ich erledigt?&#10;Was habe ich gelernt?&#10;Was möchte ich festhalten?">
+                    </textarea>
+            
+                    <!-- Werkzeugleiste unter dem Schreibfeld -->
+                    <div class="momo-note-tools">
+                    <span>Notizwerkzeuge</span>
+
+                    <button id="export" type="button">
+                    Als Text exportieren ↓
+                    </button>
+                    </div>
+                </div>
+
+        <aside class="momo-status-panel">
+
+            <h2>Angeheftete Themen</h2>
+
+            <div class="topic-card">
+
+            <div class="topic-header">
+            <span class="topic-name">Linux</span>
+            <span class="topic-xp">34 XP · Beginner</span>
+            </div>
+            <div class="topic-progress">
+            <div class="topic-progress-fill" style="width: 70%;"></div>
+            </div>
+
+                <div class="topic-next-rank">
+                Noch 6 XP bis Learner
+                </div>
+
+                </div>
+
+                </aside>
+
+                </section>
+                <!-- Unterer Bereich: Lernwerkzeuge -->
+                <section class="momo-bottom">
+
+                    <article class="momo-bottom-card">
+                        <h2>Quick Notes</h2>
+                        <p>Halte spontane Gedanken und Ideen fest.</p>
+                        <button id="quick-mode" type="button">
+                            Quick Notes öffnen
+                        </button>
+                    </article>
+
+                    <article class="momo-bottom-card">
+                        <h2>Learning Questions</h2>
+                        <p>Welche Fragen möchtest du noch klären?</p>
+                    </article>
+
+                    <article class="momo-bottom-card">
+                        <h2>Review</h2>
+                        <p>Wiederhole und festige dein Wissen.</p>
+                    </article>
+                </section>
+
+                <div class="footer">
+                    <span id="status" role="status" aria-live="polite">
+                        Bereit für deine Notizen.
+                    </span>
+                </div>
+                <p class="hint">Speicherung nur in diesem Browser, sofern erlaubt — nicht in Notion. Exportiere wichtige Notizen
+                zur Sicherung.</p>
+                </main>
+                <script>
+                    // Speichert, welcher Notizmodus gerade aktiv ist
+                    let isQuickMode = false;    
+                    const ranks = [
+                        { name: "Unranked", min: 0, max: 0 },
+                        { name: "Noob", min: 1, max: 20 },
+                        { name: "Beginner", min: 21, max: 40 },
+                        { name: "Learner", min: 41, max: 70 },
+                        { name: "Skilled", min: 71, max: 110 },
+                        { name: "Advanced", min: 111, max: 160 },
+                        { name: "Experienced", min: 161, max: 220 }
+                    ];
+                    function getRank(xp) {
+                        return ranks.find(rank => xp >= rank.min && xp <= rank.max);
+                    }
+                    console.log(getRank(34)); 
+                    // HTML-Elemente für unsere Notizen
+                    const day = document.querySelector('#day');
+                    const note = document.querySelector('#note');
+                    const status = document.querySelector('#status');
+
+                    // Überschrift und Button für den Moduswechsel
+                    const noteLabel = document.querySelector('#note-label');
+                    const quickButton = document.querySelector('#quick-mode');
+
+                    // Speicherschlüssel
+                    const prefix = 'meine-tagesnotiz-v1:';
+                    const quickNoteKey = 'momo-quick-draft-v1';
+
+                    // Aktuelles Datum ermitteln
+                    const now = new Date();
+                    day.value = new Intl.DateTimeFormat('sv-SE', {
+                        timeZone: 'Europe/Berlin', 
+                        year: 'numeric',
+                        month: '2-digit', 
+                        day: '2-digit' }).format(now);
+                    // Wählt den passenden Speicherplatz
+                    function getStorageKey() {
+                            if (isQuickMode) {
+                                return quickNoteKey;
+                            }
+
+                            return prefix + day.value;
+                        }
+
+                    function load() { 
+                        try { 
+                            note.value = localStorage.getItem(getStorageKey()) || ''; 
+
+                            status.textContent = note.value 
+                                ? 'Lokale Notiz geladen.'
+                                : 'Bereit für deine Notizen.' 
+                            } 
+                    catch (e) { 
+                        note.value = '';
+                        status.textContent = 'Speicherung nicht verfügbar — bitte exportieren.' 
+                        } 
+                    } 
+                    load(); 
+                note.addEventListener('input', () => { 
+                    try { 
+                        localStorage.setItem(getStorageKey(), note.value); 
+                        status.textContent = 'Lokal im Browser gespeichert.' 
+                        } 
+                    catch (e) { 
+                        status.textContent = 'Nicht gespeichert — bitte als Text exportieren.' 
+                    } 
+                }); 
+                // Zwischen Tagesnotiz und Quick Notes wechseln
+                quickButton.addEventListener('click', () => {
+                    isQuickMode = !isQuickMode;
+
+                    if (isQuickMode) {
+                        noteLabel.textContent = 'Meine Quick Notes';
+                        quickButton.textContent = 'Zur Tagesnotiz';
+                    } else {
+                        noteLabel.textContent = 'Meine Tagesnotiz';
+                        quickButton.textContent = 'Quick Notes öffnen';
+                    }
+
+                    load();
+                });
+                day.addEventListener('change', () => { if (!day.value) { 
+                    status.textContent = 'Bitte ein Datum auswählen.'; 
+                return } load() 
+                });
+
+            document.querySelector('#export').addEventListener('click', () => { 
+            const exportTitle = isQuickMode
+            ? 'Meine Quick Notes'
+            : 'Meine Tagesnotiz — ' + day.value;
+
+            const blob = new Blob(
+                    [exportTitle + '\n\n' + note.value + '\n'],
+                    { type: 'text/plain;charset=utf-8' }
+                );
+            const url = URL.createObjectURL(blob), a = document.createElement('a');
+            
+            a.href = url;
+            a.download = (isQuickMode ? 'Quick-Notes' : 'Tagesnotiz-' + day.value) + '.txt'; 
+            a.click();
+
+         setTimeout(() => URL.revokeObjectURL(url), 1000); 
+            status.textContent = 'Textexport angefordert.' 
+        });
+        </script>
+    </body>
+
+</html>
