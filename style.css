@@ -1,0 +1,927 @@
+/* GRUNDLAGEN: Farbvariablen und Seitengestaltung */
+:root {
+    color-scheme: light dark;
+
+    /* Hintergrund und Flächen */
+    --page-bg: #30201D;
+    --bg: #FFF7F0;
+    --surface: #F5DDD1;
+
+    /* Schrift und Rahmen */
+    --fg: #4A302A;
+    --muted: #84645C;
+    --border: #C89B8B;
+
+    /* Akzentfarbe */
+    --blue: #E990A3;
+    
+    /* Helle Papierflächen der Lunchbox */
+    --paper: #FFF3E9;
+    --paper-soft: #F7DFD3;
+    --paper-ink: #4A302A;
+    --paper-muted: #84645C;
+
+}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--fg);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+/* DASHBOARD: Grundlayout, Rahmen und Schatten */
+.momo-dashboard {
+    position: relative;
+    isolation: isolate;
+
+    width: calc(100% - 32px);
+    max-width: 1180px;
+    margin: 100px auto 32px;
+    padding: 24px;
+
+    background: var(--surface);
+
+    /* äußerste dunkle Linie */
+    border: 3px solid rgba(48, 29, 25, 0.95);
+    border-radius: 32px;
+
+    /* weicher Gesamtschatten */
+    box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.20);
+}
+.momo-dashboard::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+
+    border-radius: 26px;
+
+    /* dickere helle Linie innen */
+    border: 6px solid #d8a08a;
+
+    /* leichter Lichtsaum / Glow */
+    box-shadow:
+        0 0 0 1px rgba(255, 236, 220, 0.35),
+        0 0 14px rgba(231, 176, 152, 0.24);
+
+    pointer-events: none;
+}
+.momo-dashboard > * {
+    position: relative;
+    z-index: 1;
+}
+/* KOPFBEREICH: Header, Logo, Datum und Maskottchen */
+.momo-header {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) 190px;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.momo-logo {
+    width: 56px;
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg);
+
+    font-size: 24px;
+    font-weight: 700;
+}
+/* APP-LOGO: Bilder und Standardansicht */
+.momo-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Standard: Pfötchen anzeigen */
+.momo-logo .logo-pfote {
+    display: block;
+}
+
+/* Mini-Momo zunächst ausblenden */
+.momo-logo .logo-mini {
+    display: none;
+}
+/* MOMO-TITEL: Kleines Namensschild */
+.momo-title h1 {
+    display: inline-block;
+    margin: 0 0 4px;
+    padding: 6px 12px;
+
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+.momo-avatar {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+
+    width: 300px;
+    height: 300px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Größe der Momo-Grafik */
+.momo-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.momo-date {
+    min-width: 0;
+}
+h1 {
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0 0 4px;
+    font-weight: 650;
+}
+p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+input,
+textarea,
+button {
+    font: inherit;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--fg);
+    background: var(--bg);
+}
+input {
+    padding: 8px;
+    min-height: 44px;
+    max-width: 100%;
+}
+textarea {
+    display: block;
+    resize: vertical;
+    width: 100%;
+    min-height: 180px;
+    padding: 16px;
+    line-height: 1.6;
+}
+textarea::placeholder {
+    color: var(--muted);
+    opacity: 1;
+}
+button {
+    min-height: 44px;
+    padding: 8px 16px;
+    cursor: pointer;
+    background: var(--surface);
+    font-weight: 600;
+}
+button:hover {
+    border-color: var(--blue);
+}
+:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+}
+/* HAUPTBEREICH: Notizfeld und Themenübersicht */
+.momo-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 24px;
+    align-items: stretch;
+}
+/* NOTIZBEREICH: Schreibfeld und Notizwerkzeuge */
+.momo-note-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+/* Textfeld füllt den verfügbaren Platz */
+.momo-note-panel textarea {
+    flex: 1;
+}
+/* Werkzeugleiste unter dem Schreibfeld */
+.momo-note-tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 12px;
+    padding: 10px 12px;
+
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+}
+/* Beschriftung der Werkzeugleiste */
+.momo-note-tools span {
+    color: var(--fg);
+    font-size: 13px;
+}
+/* Export-Button in Pastellrosa */
+.momo-note-tools #export {
+    background: #F6CDD5;
+    color: var(--paper-ink);
+    border-color: #D6A3A7;
+}
+/* STATUSBEREICH: Angeheftete Themen und XP-Fortschritt */
+.momo-status-panel {
+    padding: 16px;
+
+    border: 4px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg);
+}
+.momo-status-panel h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+.topic-card {
+    padding: 14px;
+    margin-bottom: 12px;
+
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+.topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 4px;
+}
+.topic-name {
+    font-weight: 700;
+}
+.topic-xp {
+    font-size: 13px;
+    color: var(--muted);
+}
+.topic-progress {
+    width: 100%;
+    height: 10px;
+
+    overflow: hidden;
+
+    background: var(--border);
+    border-radius: 999px;
+}
+.topic-progress-fill {
+    height: 100%;
+
+    background: var(--blue);
+    border-radius: inherit;
+}
+.topic-next-rank {
+    margin-top: 6px;
+
+    font-size: 12px;
+    color: var(--muted);
+}
+/* Helle Innenflächen von Momo */
+.momo-note-panel textarea,
+.momo-status-panel {
+    background: var(--paper);
+    color: var(--paper-ink);
+}
+
+/* Lesbarer Platzhalter im Schreibfeld */
+.momo-note-panel textarea::placeholder {
+    color: var(--paper-muted);
+}
+
+/* Kleine Themenkarte im Statusbereich */
+.momo-status-panel .topic-card {
+    background: var(--paper-soft);
+}
+
+/* Dezente Zusatztexte der Themenkarte */
+.momo-status-panel .topic-xp,
+.momo-status-panel .topic-next-rank {
+    color: var(--paper-muted);
+}
+/* LERNWERKZEUGE: Quick Notes, Lernfragen und Wiederholung */
+
+/* DASHBOARD: Buttons unter den Lernthemen */
+#add-topic,
+#manage-topics {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#add-topic {
+    background: #543630;
+    color: #FFF1E6;
+}
+
+#manage-topics {
+    background: #F6CDD5;
+    color: #4A302A;
+    border-color: #D6A3A7;
+}
+
+/* THEMENVERWALTUNG: Einzelne Themenkarten */
+.manage-topic-entry {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 14px;
+    margin-bottom: 12px;
+    background: var(--paper-soft);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+}
+
+/* Themenname über den Aktionsbuttons */
+.manage-topic-entry > span {
+    flex: 1 1 100%;
+    font-weight: 600;
+    color: var(--paper-ink);
+    overflow-wrap: anywhere;
+}
+
+/* Alle drei Aktionsbuttons */
+.manage-topic-entry button {
+    flex: 1 1 110px;
+    min-width: 0;
+    padding: 8px;
+    font-size: 13px;
+}
+
+/* Anheften / Entpinnen */
+.manage-topic-entry button:nth-of-type(1) {
+    background: #543630;
+    color: #FFF1E6;
+}
+
+/* Bearbeiten */
+.manage-topic-entry button:nth-of-type(2) {
+    background: var(--paper);
+    color: var(--paper-ink);
+}
+
+/* Löschen */
+.manage-topic-entry button:nth-of-type(3) {
+    background: #F6CDD5;
+    color: #713542;
+    border-color: #D6A3A7;
+}
+
+.momo-bottom {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* LERNKARTEN: Vollständig klickbare Modus-Karten */
+.momo-bottom-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    min-height: 180px;
+    padding: 16px;
+
+    text-align: left;
+    color: var(--paper-ink);
+
+    border: 4px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Quick Notes – Rosa */
+.momo-bottom-card:nth-child(1) {
+    border-color: #E6A8B8;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            #FFFFFF20 0px 12px,
+            transparent 12px 24px
+        ),
+        #FBE4E5;
+}
+
+/* Learning Questions – Apricot */
+.momo-bottom-card:nth-child(2) {
+    border-color: #F0C58D;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            #FFFFFF20 0px 12px,
+            transparent 12px 24px
+        ),
+        #FFF0DC;
+}
+
+/* Review – Lavendel */
+.momo-bottom-card:nth-child(3) {
+    border-color: #CDB4E9;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            #FFFFFF20 0px 12px,
+            transparent 12px 24px
+        ),
+        #F2E8FA;
+}
+
+/* Überschrift und Beschreibung */
+.momo-card-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.momo-card-description {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--paper-muted);
+}
+
+/* Pfeil unten rechts */
+.momo-card-arrow {
+    margin-top: auto;
+    align-self: flex-end;
+    font-size: 26px;
+    transition: transform 0.25s ease;
+}
+/* LERNKARTEN-LAYOUT: Getrennter Text- und Grafikbereich */
+.momo-bottom-card--illustrated {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 8px;
+
+    min-height: 195px;
+}
+
+/* Linker Bereich: Texte */
+.momo-card-text {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    align-self: start;
+}
+
+/* Rechter Bereich: Momo */
+.momo-card-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    overflow: hidden;
+
+    pointer-events: none;
+}
+
+/* Momo-Grafik */
+.momo-card-image {
+    display: block;
+
+    width: 100%;
+    height: 155px;
+    object-fit: contain;
+
+    transition: transform 0.25s ease;
+}
+
+/* Pfeil innerhalb der illustrierten Karte */
+.momo-bottom-card--illustrated .momo-card-arrow {
+    position: absolute;
+    right: 12px;
+    bottom: 6px;
+
+    margin-top: 0;
+}
+
+/* HOVER: Momo bewegt sich leicht */
+.momo-bottom-card:hover .momo-card-image {
+    transform: translateY(-6px) rotate(-4deg);
+}
+/* HOVER: Karte und Pfeil bewegen */
+.momo-bottom-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(48, 29, 25, 0.20);
+}
+
+.momo-bottom-card:hover .momo-card-arrow {
+    transform: translateX(5px);
+}
+
+/* Bewegung bei entsprechender Systemeinstellung reduzieren */
+@media (prefers-reduced-motion: reduce) {
+    .momo-bottom-card,
+    .momo-card-arrow {
+        transition: none;
+    }
+
+    .momo-bottom-card:hover,
+    .momo-bottom-card:hover .momo-card-arrow {
+        transform: none;
+    }
+}
+/* LEARNING QUESTIONS: Momo unten mittig */
+
+/* Karte vertikal statt in zwei Spalten aufteilen */
+#learning-open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    height: 195px;
+    min-height: 195px;
+    padding: 14px 14px 10px;
+}
+
+#learning-open .momo-card-text {
+    width: 100%;
+    align-items: center;
+    align-self: auto;
+    margin-bottom: 6px;
+}
+
+#learning-open .momo-card-title {
+    margin-bottom: 4px;
+}
+
+#learning-open .momo-card-description {
+    margin-top: 0;
+    font-size: 13px;
+}
+
+/* LEARNING QUESTIONS: Grafikbereich unten zentrieren */
+#learning-open .momo-card-art {
+    position: absolute;
+
+    left: 8px;
+    right: 8px;
+    bottom: -6px;
+
+    width: auto;
+    height: 150px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    overflow: visible;
+    pointer-events: none;
+}
+
+/* Momo vollständig und unverzerrt anzeigen */
+#learning-open .momo-card-image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+
+    object-fit: contain;
+    object-position: center bottom;
+}
+/* REVIEW: Grafik links, Text rechts */
+#review-open .momo-card-text {
+    align-items: flex-end;
+    text-align: right;
+}
+
+#review-open .momo-card-description {
+    text-align: right;
+}
+
+#review-open .momo-card-art {
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+/* REVIEW: Mehr Platz für das Archivregal */
+#review-open {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+}
+/* OVERLAY: Gemeinsames Fenster für alle Lernbereiche */
+.momo-overlay {
+    width: min(860px, calc(100% - 32px));
+    max-height: 85vh;
+    padding: 0;
+
+    background: var(--paper);
+    color: var(--paper-ink);
+
+    border: 4px solid var(--border);
+    border-radius: 20px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    overflow-y: auto;
+
+}
+
+/* Dashboard hinter dem geöffneten Overlay abdunkeln */
+.momo-overlay::backdrop {
+    background: rgba(20, 10, 10, 0.70);
+    backdrop-filter:blur(3px);
+}
+
+/* Kopfbereich des Overlays */
+.overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:16px;
+
+    padding: 20px 24px;
+    background: var(--paper-soft);
+    border-bottom: 2px solid var(--border);
+}
+
+/* Titel und Beschreibung */
+.overlay-heading h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.overlay-heading p {
+    color: var(--paper-muted);
+}
+
+/* Schließende Buttons */
+#overlay-close {
+    background: var(--paper);
+    color: var(--paper-ink);
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+/* Inhaltsbereich */
+.overlay-content {
+    min-height: 250px;
+    padding: 24px;
+}
+
+/* LEARNING QUESTIONS: Lernkarten-Raster */
+.learning-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+/* Einzelne Lernkarten als abgerundete Würfel */
+.learning-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    aspect-ratio: 1;
+    min-width: 0;
+    padding: 16px;
+
+    text-align: left;
+    color: var(--paper-ink);
+    background: var(--paper-soft);
+
+    border: 3px solid var(--border);
+    border-radius: 20px;
+
+    box-shadow: 0 5px 0 rgba(74, 48, 42, 0.18);
+}
+
+/* LEARNING QUESTIONS: Navigation mit Pfeilen */
+.learning-navigation {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 520px) 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Pfeile links und rechts */
+.learning-navigation > button {
+    width: 44px;
+    height: 48px;
+    padding: 0;
+
+    font-size: 24px;
+    color: var(--paper-ink);
+    background: var(--paper-soft);
+
+    border: 2px solid var(--border);
+    border-radius: 16px;
+}
+
+/* Pfeile beim Darüberfahren hervorheben */
+.learning-navigation > button:hover {
+    background: #F6CDD5;
+}
+
+/* Platz für unsere Seitenpunkte */
+.learning-page-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Lesbare Texte innerhalb des Overlays */
+.overlay-content p {
+    color: var(--paper-ink);
+}
+
+/* FUSSBEREICH: Statusmeldungen und Speicherhinweise */
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 16px 0 12px;
+}
+#status {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.hint {
+    font-size: 14px;
+    line-height: 1.5;
+}
+/* RESPONSIVE DESIGN: Vereinfachte Darstellung bei wenig Platz */
+@media (max-width:900px) {
+
+    /* Header-Momo bei wenig Platz neu positionieren */
+    .momo-avatar  {
+        display: none;
+    }
+    /* Nur noch zwei Karten nebeneinander */
+    .momo-bottom {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Beschreibung bei illustrierten Karten ausblenden */
+    .momo-bottom-card--illustrated .momo-card-description {
+        display: none;
+    }
+        /* Kleines Logo: Pfötchen ausblenden */
+    .momo-logo .logo-pfote {
+        display: none;
+    }
+
+    /* Mini-Momo liegt mit den Pfoten auf dem Logorahmen */
+    .momo-logo .logo-mini {
+        display: block;
+
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+
+        width: 62px;
+        height: 62px;
+        max-width: none;
+
+        transform: translateX(-50%);
+        z-index: 2;
+    }
+
+    /* Logorahmen als Bezugspunkt für Mini-Momo */
+    .momo-logo {
+        position: relative;
+        overflow: visible;
+    }
+
+    /* HEADER: Kompakte Anordnung */
+    .momo-header {
+        grid-template-columns:56px minmax(0, 1fr);
+        row-gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    /* Titel bleibt rechts neben Mini-Momo */
+    .momo-title {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+    }
+
+    /* Kleinen Untertitel ausblenden */
+    .momo-title p {
+        display: none;
+    }
+
+    /* Datum unter den Titel verschieben */
+    .momo-date {
+        grid-column: 2;
+        grid-row: 2;
+    }
+}
+/* RESPONSIVE: Sehr schmale Fenster */
+@media (max-width: 650px) {
+
+    /* Karten untereinander anordnen */
+    .momo-bottom {
+        grid-template-columns: 1fr;
+    }
+
+    /* Großes Maskottchen ausblenden */
+    .momo-avatar {
+        display: none;
+    }
+
+    /* Hauptbereich untereinander anordnen */
+    .momo-main {
+        grid-template-columns: 1fr;
+    }
+}
+/* RESPONSIVE DESIGN: Darstellung auf kleinen Bildschirmen */
+@media(max-width:480px) {
+    .momo-dashboard {
+        width: calc(100% - 24px);
+        margin: 12px auto;
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .momo-header {
+        grid-template-columns: 56px 1fr;
+    }
+
+    .momo-avatar {
+        grid-column: 1;
+    }
+
+    .momo-date {
+        grid-column: 2;
+    }
+    h1 {
+        font-size: 26px;
+    }
+
+    .footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    textarea {
+        min-height: 180px;
+    }
+    .momo-main {
+        grid-template-columns: 1fr;
+    }
+    /* Lernkarten auf kleinen Bildschirmen untereinander */
+    .momo-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+/* DARK MODE: Automatische Anpassung an die Systemeinstellung */
+@media(prefers-color-scheme:dark) {
+    
+    :root {
+        --page-bg: #1E1413;
+        --bg: #3C2927;
+        --surface: #543630;
+        --fg: #FFF1E6;
+        --muted: #E1BFB2;
+        --border: #A0776D;
+        --blue: #FF9CAB;
+    }
+
+}
