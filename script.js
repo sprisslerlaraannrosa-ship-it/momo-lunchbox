@@ -13,6 +13,42 @@ const ranks = [
 function getRank(xp) {
     return ranks.find(rank => xp >= rank.min && xp <= rank.max);
 }
+
+ // FORTSCHRITT: Prozent innerhalb des aktuellen Rangs
+function getProgress(xp, rank) {
+
+    // Ohne gültigen Rang oder bei 0 XP kein Fortschritt
+    if (!rank || xp === 0) {
+        return 0;
+    }
+
+    // Bereits erreichte XP-Stufen in diesem Rang
+    const earnedXp = xp - rank.min + 1;
+
+    // Anzahl aller XP-Stufen dieses Rangs
+    const totalXp = rank.max - rank.min + 1;
+
+    // Ergebnis in Prozent zurückgeben
+    return Math.round((earnedXp / totalXp) * 100);
+}
+ // NÄCHSTER RANG: Passenden Rang anhand der XP finden
+function getNextRank(xp) {
+    return ranks.find(rank => rank.min > xp) ?? null;
+}
+
+// FEHLENDE XP: Abstand zum nächsten Rang berechnen
+function getMissingXp(xp) {
+
+    const nextRank = getNextRank(xp);
+
+    // Beim höchsten Rang fehlen keine XP mehr
+    if (!nextRank) {
+        return 0;
+    }
+
+    return nextRank.min - xp;
+}
+
 // XP-SPEICHER: Fortschritt für das Lernthema Linux
 const xpStorageKey = 'momo-xp-linux-v1';
 let currentXp = 0;
@@ -264,15 +300,36 @@ function renderTopics() {
         const name = document.createElement('div');
         name.className = 'topic-name';
         name.textContent = topic.name;
+    
+        // XP und Rang berechnen
+        const rank = getRank(topic.xp);
+        const progress = getProgress(topic.xp, rank);
+        const nextRank = getNextRank(topic.xp);
 
-        // XP und Rang
         const xp = document.createElement('div');
         xp.className = 'topic-xp';
-        xp.textContent = `${topic.xp} XP · ${getRank(topic.xp)?.name ?? 'Unranked'}`;
+        xp.textContent = `${topic.xp} XP · ${rank?.name ?? 'Unranked'}`;
+
+        // Fortschrittsbalken erstellen
+        const progressBar = document.createElement('div');
+        progressBar.className = 'topic-progress';
+
+        const progressFill = document.createElement('div');
+        progressFill.className = 'topic-progress-fill';
+        progressFill.style.width = `${progress}%`;
+        progressBar.append(progressFill);
+
+        // Hinweis auf nächsten Rang
+        const nextRankText = document.createElement('div');
+        nextRankText.className = 'topic-next-rank';
+        nextRankText.textContent = nextRank
+            ? `Noch ${getMissingXp(topic.xp)} XP bis ${nextRank.name}`
+            : 'Höchster Rang erreicht';
 
         // Elemente zusammensetzen
-        card.append(name, xp);
+        card.append(name, xp, progressBar, nextRankText);
         container.append(card);
+
     });
 }
 
