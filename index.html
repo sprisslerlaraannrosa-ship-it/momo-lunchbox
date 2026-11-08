@@ -49,14 +49,56 @@
                     <textarea id="note"
                         placeholder="Was habe ich erledigt?&#10;Was habe ich gelernt?&#10;Was möchte ich festhalten?">
                     </textarea>
-                
-                    <!-- Werkzeugleiste unter dem Schreibfeld -->
-                    <div class="momo-note-tools">
-                        <span>Notizwerkzeuge</span>
 
-                        <button id="export" type="button">
-                            Als Text exportieren ↓
+                    <!-- Status der neuen Lernnotiz -->
+                    <p id="draft-save-status"
+                    class="draft-save-status"
+                    role="status"
+                    aria-live="polite"
+                    hidden> 
+                        📝 Neue Lernnotiz – noch nicht im Lernarchiv gespeichert.
+                    </p>
+
+                    <!-- Werkzeugleiste unter dem Schreibfeld -->
+                    <div class="momo-note-tools"
+                        role="group"
+                        aria-label="Notizwerkzeuge">
+
+                        <!-- Neue Lernnotiz beginnen -->
+                        <button id="new-note" type="button"
+                                aria-label="Neue Notiz"
+                                title="Neue Notiz erstellen">
+                            ➕
                         </button>
+
+                        <!-- Zur Tagesnotiz wechseln -->
+                        <button id="daily-mode" type="button"
+                                aria-label="Tagesnotiz"
+                                title="Zur Tagesnotiz wechseln">
+                            📅
+                        </button>
+
+                        <!-- Lernnotiz manuell speichern -->
+                        <button id="save-note-open" type="button"
+                                aria-label="Notiz speichern"
+                                title="Notiz speichern">
+                            💾 Speichern
+                        </button>
+                        
+                        <!-- Schnellzugriff auf das Lernarchiv -->
+                        
+                        <button id="my-notes-open" type="button"
+                                aria-label="Meine Notizen"
+                                title="Meine Notizen">
+                            📚
+                        </button>
+                        
+                        <button id="export" type="button"
+                                aria-label="Als Text exportieren"
+                                title="Als Text exportieren">
+                            ⬇️
+                        </button>
+
                     </div>
                 </div>
                 <!-- Statusbereich: Angeheftete Themen und XP-Fortschritt -->
@@ -290,27 +332,120 @@
 
                 </section>
                 
-                <!-- REVIEW: Gespeicherte Lernnotizen -->
+                
+                <!-- REVIEW: Lernarchiv und Wiederholungsbereich -->
                 <section id="review-view" hidden>
+                    <h3>Review – Mein Lernarchiv</h3>
 
-                    <h3>Review – Meine Lernnotizen</h3>
+                    <!-- Reiter zum Umschalten -->
+                    <div class="review-tabs">
+                        <button id="review-tab-notes" type="button"
+                                aria-pressed="true">Meine Notizen</button>
 
-                    <p>
-                        Hier kannst du später deine gespeicherten
-                        Lernnotizen wiederholen.
-                    </p>
+                        <button id="review-tab-repeat" type="button"
+                                aria-pressed="false">Wiederholen</button>
+                    </div>
 
-                    <p>
-                        Die Notizensammlung bauen wir als
-                        nächsten eigenen Funktionsbereich aus.
-                    </p>
+                    <!-- Erster Reiter: Gespeicherte Notizen -->
+                    <div id="review-notes-panel">
+
+                        <label for="review-topic-filter">
+                            Nach Lernthema filtern
+                        </label>
+
+                        <select id="review-topic-filter">
+                            <option value="all">Alle Themen</option>
+                        </select>
+
+                        <div id="review-notes-list"></div>
+
+                        
+                        <!-- Ausgewählte Notiz lesen und bearbeiten -->
+                        <article id="review-note-detail" hidden>
+
+                            <!-- Normale Leseansicht -->
+                            <div id="review-note-read">
+                                <h4 id="review-note-title"></h4>
+                                <p id="review-note-text"></p>
+
+                                <div class="review-note-actions">
+                                    <button id="review-edit-open" type="button">
+                                        ✏️ Bearbeiten
+                                    </button>
+
+                                    <button id="review-export-note" type="button">
+                                        ⬇️ TXT exportieren
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bearbeitungsformular -->
+                            <form id="review-edit-form" hidden>
+                                <label for="review-edit-title">Titel</label>
+                                <input id="review-edit-title"
+                                    type="text" maxlength="100" required>
+
+                                <label for="review-edit-topic">Lernthema</label>
+                                <select id="review-edit-topic" required></select>
+
+                                <label for="review-edit-text">Notiztext</label>
+                                <textarea id="review-edit-text" required></textarea>
+
+                                <div class="review-note-actions">
+                                    <button id="review-edit-save" type="submit">
+                                        💾 Änderungen speichern
+                                    </button>
+
+                                    <button id="review-edit-cancel" type="button">
+                                        Abbrechen
+                                    </button>
+                                </div>
+                            </form>
+
+                        </article>
+
+
+                    </div>
+
+                    <!-- Zweiter Reiter: Noch nicht verfügbar -->
+                    <div id="review-repeat-panel" hidden>
+                        <p>Funktion noch nicht verfügbar</p>
+                    </div>
+                </section>
+
+                
+                <!-- NOTIZ SPEICHERN: Titel und Lernthema auswählen -->
+                <section id="save-note-view" hidden>
+
+                    <form id="save-note-form">
+
+                        <label for="save-note-title">Titel der Notiz *</label>
+                        <input
+                            id="save-note-title"
+                            type="text"
+                            maxlength="100"
+                            placeholder="z. B. JavaScript Grundlagen"
+                            required
+                        >
+
+                        <label for="save-note-topic">Lernthema *</label>
+                        <select id="save-note-topic" required></select>
+
+                        <button type="submit">
+                            💾 Lernnotiz speichern
+                        </button>
+
+                    </form>
 
                 </section>
+
 
             </div>
 
         </dialog>
         <script src="script.js"></script>
+        <script src="momo-demo-data.js"></script>
+        <script src="momo-demo-init.js"></script>
     </body>
 
 </html>

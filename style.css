@@ -222,29 +222,71 @@ button:hover {
 }
 /* Werkzeugleiste unter dem Schreibfeld */
 .momo-note-tools {
-    display: flex;
+    display: grid;
+    grid-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
 
     margin-top: 12px;
-    padding: 10px 12px;
+    padding: 8px 10px;
 
     background: var(--bg);
     border: 2px solid var(--border);
     border-radius: 12px;
 }
-/* Beschriftung der Werkzeugleiste */
-.momo-note-tools span {
-    color: var(--fg);
-    font-size: 13px;
+/* Kompakte und zentrierte Werkzeugbuttons */
+.momo-note-tools > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 6px;
+
+    font-size: 18px;
 }
 /* Export-Button in Pastellrosa */
 .momo-note-tools #export {
     background: #F6CDD5;
     color: var(--paper-ink);
     border-color: #D6A3A7;
+}
+/* ENTWURFSSTATUS: Hinweis unter dem Schreibfeld */
+.draft-save-status {
+    margin-top: 10px;
+    padding: 10px 14px;
+
+    background: var(--paper-soft);
+    color: var(--paper-ink);
+
+    border: 2px solid var(--border);
+    border-radius: 12px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+/* QUICKBUTTON: Neue Lernnotiz */
+#new-note {
+    background: var(--paper-soft);
+    color: var(--paper-ink);
+    border-color: var(--border);
+}
+/* QUICKBUTTON: Zur Tagesnotiz zurückkehren */
+#daily-mode {
+    background: var(--paper-soft);
+    color: var(--paper-ink);
+    border-color: var(--border);
+}
+/* Wichtigster Quickbutton: Manuelles Speichern */
+#save-note-open {
+    background: #E990A3;
+    color: #4A302A;
+    border-color: #D27A8F;
+
+    font-size: 15px;
+    white-space: nowrap;
 }
 /* STATUSBEREICH: Angeheftete Themen und XP-Fortschritt */
 .momo-status-panel {
@@ -924,4 +966,151 @@ button:hover {
         --blue: #FF9CAB;
     }
 
+}
+
+/* MEINE NOTIZEN: Quickbutton */
+#my-notes-open {
+    background: #F6CDD5;
+    color: var(--paper-ink);
+    border-color: #D6A3A7;
+}
+
+/* REVIEW: Reiter */
+.review-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.review-tabs button {
+    flex: 1 1 150px;
+    color: var(--paper-ink);
+    background: var(--paper-soft);
+}
+
+/* Aktiver Reiter */
+.review-tabs button[aria-pressed="true"] {
+    background: #543630;
+    color: #FFF1E6;
+}
+
+/* Themenfilter */
+#review-topic-filter {
+    width: 100%;
+    min-height: 44px;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    color: var(--paper-ink);
+    background: var(--paper);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+}
+
+/* Gespeicherte Notizen als Liste */
+#review-notes-list {
+    display: grid;
+    gap: 10px;
+}
+
+.review-note-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+    text-align: left;
+    color: var(--paper-ink);
+    background: var(--paper-soft);
+    overflow-wrap: anywhere;
+}
+
+.review-note-entry span {
+    color: var(--paper-muted);
+    font-size: 12px;
+}
+
+/* Vollständigen Notizinhalt anzeigen */
+#review-note-detail {
+    margin-top: 18px;
+    padding: 16px;
+    background: var(--paper-soft);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+}
+
+#review-note-detail h4 {
+    margin: 0 0 10px;
+}
+
+#review-note-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Platzhalter im Wiederholungsbereich */
+#review-repeat-panel {
+    text-align: center;
+    padding: 32px 12px;
+}
+
+/* ARCHIV: Buttons für Lesen und Bearbeiten */
+.review-note-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.review-note-actions button {
+    flex: 1 1 170px;
+}
+
+/* Hauptaktionen dunkel hervorheben */
+#review-edit-open,
+#review-edit-save {
+    background: #543630;
+    color: #FFF1E6;
+}
+
+/* Nebenaktionen in Pastellrosa */
+#review-export-note,
+#review-edit-cancel {
+    background: #F6CDD5;
+    color: var(--paper-ink);
+}
+
+/* Bearbeitungsfelder */
+#review-edit-form input,
+#review-edit-form select,
+#review-edit-form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 10px;
+
+    background: var(--paper);
+    color: var(--paper-ink);
+
+    border: 2px solid var(--border);
+    border-radius: 10px;
+}
+
+/* Versteckte Ansichten zuverlässig ausblenden */
+#review-notes-list[hidden],
+#review-note-read[hidden],
+#review-edit-form[hidden] {
+    display: none;
+}
+/* MOBILE: Kompakte Werkzeugleiste bei wenig Platz */
+@media (max-width: 560px) {
+
+    .momo-note-tools {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .momo-note-tools #save-note-open {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
 }
