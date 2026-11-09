@@ -8,7 +8,7 @@
 
 ---
 
-## 💜 Die Idee hinter Momo
+##  Die Idee hinter Momo
 
 Momo Lunchbox ist mein persönliches Lernprojekt, das ich während meiner Umschulung zur **Fachinformatikerin für Anwendungsentwicklung** entwickle.
 
@@ -18,7 +18,7 @@ Mein Grundgedanke: **Festhalten → Verstehen → Wiederholen.**
 
 Die Anwendung ist bewusst noch ein Prototyp. Ich entwickle sie Schritt für Schritt weiter und nutze das Projekt, um HTML, CSS und vor allem JavaScript praktisch zu lernen.
 
-## ✨ Was die aktuelle Demo bereits kann
+##  Was die aktuelle Demo bereits kann
 
 | Bereich | Funktion |
 | --- | --- |
@@ -33,7 +33,7 @@ Die Anwendung ist bewusst noch ein Prototyp. Ich entwickle sie Schritt für Schr
 
 **Wichtig:** Die Karten **Learning Questions** und **Wiederholen** sind bislang Entwürfe bzw. Platzhalter. Ein vollständiges Karteikarten- und Wiederholungssystem ist noch nicht implementiert.
 
-## 🚀 Demo ausprobieren
+##  Demo ausprobieren
 
 Für die aktuelle Version ist **kein Konto, keine Datenbank und kein API-Schlüssel** notwendig.
 
@@ -51,7 +51,7 @@ Die Daten liegen in `momo-demo-data.js`. Das Skript `momo-demo-init.js` übernim
 
 > **Hinweis zur Datenspeicherung:** Momo verwendet derzeit `localStorage`. Daten bleiben nach dem Neuladen der Seite erhalten, sind aber an den jeweiligen Browser und dessen Herkunft (Origin) gebunden. Es gibt noch keine Synchronisierung mit anderen Geräten oder eine automatische Cloud-Sicherung. Wer Browserdaten löscht, kann dadurch eigene Notizen verlieren.
 
-## 🛠️ Technik und Projektaufbau
+##  Technik und Projektaufbau
 
 Ich verwende bewusst zunächst **Vanilla JavaScript**, also keine Frameworks. Dadurch kann ich die Grundlagen und das Zusammenspiel der einzelnen Bestandteile besser nachvollziehen.
 
@@ -87,7 +87,7 @@ Die drei JavaScript-Dateien werden in der `index.html` in dieser Reihenfolge ein
 
 **Warum?** Erst müssen die Beispieldaten bereitstehen, dann kann Momo sie bei Bedarf in den Browserspeicher laden. Anschließend startet die eigentliche Anwendungslogik und liest die Daten aus.
 
-## 🧠 Eine Herausforderung: XP richtig umbuchen
+##  Eine Herausforderung: XP richtig umbuchen
 
 Ein Problem ist beim nachträglichen Bearbeiten von Lernnotizen aufgetaucht: Wenn ich eine Notiz einem anderen Lernthema zugewiesen habe, blieb ihre XP-Belohnung zunächst beim alten Thema.
 
@@ -103,7 +103,7 @@ So entstehen beim Verschieben keine zusätzlichen XP. Die Speicherung enthält a
 
 Gerade an solchen Problemen lerne ich viel: Nicht nur *dass* eine Funktion läuft, sondern auch, wie Daten zusammenhängen und welche Sonderfälle ich berücksichtigen muss.
 
-## 🗺️ Was ich als Nächstes plane
+##  Was ich als Nächstes plane
 
 Die folgenden Funktionen sind **Ideen für spätere Versionen** und noch nicht Bestandteil der aktuellen Demo:
 
@@ -116,13 +116,13 @@ Die folgenden Funktionen sind **Ideen für spätere Versionen** und noch nicht B
 - **Bessere Notizformatierung:** Überschriften, Hervorhebungen und strukturierte Texte.
 - **Weitere Einstellungen:** Manueller Theme-Wechsel und umfassendere Import-/Exportmöglichkeiten.
 
-## 🌱 Warum ich dieses Projekt entwickle
+##  Warum ich dieses Projekt entwickle
 
 Momo ist für mich Lernwerkzeug **und** Programmierübung zugleich. Ich kann eigene Ideen direkt ausprobieren, Fehler nachvollziehen, Lösungen testen und die Anwendung Stück für Stück verbessern.
 
 Dabei lege ich Wert darauf, meinen Code zu verstehen und technische Entscheidungen erklären zu können. Zum Lernen nutze ich neben Unterrichtsunterlagen und dem Austausch mit anderen auch KI-Unterstützung, zum Beispiel zum Strukturieren von Ideen, Erklären neuer Konzepte und zur Fehlersuche.
 
-**Momo Lunchbox ist noch nicht fertig – und genau das macht das Projekt für mich so spannend.** 🐾
+**Momo Lunchbox ist noch nicht fertig – und genau das macht das Projekt für mich so spannend.** 
 
 ---
 
